@@ -4,7 +4,7 @@ The MelonLoader Wiki source code
 
 ## Contributing
 
-*Most* of the docs are just straight md files and it's as easy as editing the md file and making a pull request to contribute.
+_Most_ of the docs are just straight md files and it's as easy as editing the md file and making a pull request to contribute.
 Do note that if you want to add a new page, make sure to add an entry to `docs/_sidebar.md`.
 
 If you would like to locally host the docs on your own machine, simply download [docsify](https://docsify.js.org/#/) and call `docsify serve` in the docs folder, and docsify will do the rest for you.

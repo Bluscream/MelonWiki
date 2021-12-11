@@ -5,7 +5,7 @@ Xref Scanning stands for Cross Reference Scanning. It is a technology that is al
 Normally while modding, modders would have to hope that an obfuscated method name does not change between updates.
 Xref Scanning omits this completely allowing modders to futureproof their mods and not have them break every udpate.
 It basically allows modders to get strings and methods used in a scanned method and also methods that use that scanned method.
-They can then use this information to identify a method without using its name. 
+They can then use this information to identify a method without using its name.
 Since the information Xref Scans gather is much more static than method names, mods can be more easily futureproofed.
 
 Note that on Il2Cpp games Xref Scanning cannot find virtual method calls, delegate creation, and inline method calls.
@@ -18,25 +18,28 @@ First, ensure you have `UnhollowerBaseLib.dll` referenced. It can be found in th
 Now we can use `UnhollowerRuntimeLib.XrefScans.XrefScanner.XrefScan(methodBase)` to scan our method (`methodBase`) of choice in the form of a `MethodBase`.<br>
 This will return an `IEnumerable<UnhollowerRuntimeLib.XrefScans.XrefInstance>`, which we can loop through.<br>
 Here's what your code should look like so far:
+
 ```cs
 var instances = UnhollowerRuntimeLib.XrefScans.XrefScanner.XrefScan(methodBase);
-foreach (UnhollowerRuntimeLib.XrefScans.XrefInstance instance in instances) 
+foreach (UnhollowerRuntimeLib.XrefScans.XrefInstance instance in instances)
 {
-    
+
 }
 ```
 
 With this set up, we can now call `TryResolve()` on the `XrefInstance` to get the `MethodBase` representing a method called in the scanned method.<br>
 The final code should look like this:
+
 ```cs
 var instances = UnhollowerRuntimeLib.XrefScans.XrefScanner.XrefScan(methodBase);
-foreach (UnhollowerRuntimeLib.XrefScans.XrefInstance instance in instances) 
+foreach (UnhollowerRuntimeLib.XrefScans.XrefInstance instance in instances)
 {
     MethodBase calledMethod = instance.TryResolve();
-    
+
     // The rest of your code using this information
 }
 ```
+
 Note that `TryResolve` may not always return a `MethodBase`. So, make sure to have a null check or to catch the exception
 
 ### Finding Methods That Use a Method
@@ -47,25 +50,28 @@ First, ensure you have `UnhollowerBaseLib.dll` referenced. It can be found in th
 Now we can use `UnhollowerRuntimeLib.XrefScans.XrefScanner.UsedBy(methodBase)` to scan our method of choice in the form of a `MethodBase`.<br>
 This will return an `IEnumerable<UnhollowerRuntimeLib.XrefScans.XrefInstance>`, which we can loop through.<br>
 Here's what your code should look like so far:
+
 ```cs
 var instances = UnhollowerRuntimeLib.XrefScans.XrefScanner.UsedBy(methodBase);
-foreach (UnhollowerRuntimeLib.XrefScans.XrefInstance instance in instances) 
+foreach (UnhollowerRuntimeLib.XrefScans.XrefInstance instance in instances)
 {
-    
+
 }
 ```
 
 With this set up, we can now call `TryResolve()` on the `XrefInstance` to get the `MethodBase` representing a method that used the scanned method.<br>
 The final code should look like this:
+
 ```cs
 var instances = UnhollowerRuntimeLib.XrefScans.XrefScanner.UsedBy(methodBase);
-foreach (UnhollowerRuntimeLib.XrefScans.XrefInstance instance in instances) 
+foreach (UnhollowerRuntimeLib.XrefScans.XrefInstance instance in instances)
 {
     MethodBase calledMethod = instance.TryResolve();
-    
+
     // The rest of your code using this information
 }
 ```
+
 Note that `TryResolve` may not always return a `MethodBase`. So, make sure to have a null check or to catch the exception
 
 ### Finding Strings Used in a Method
@@ -76,24 +82,26 @@ First, ensure you have `UnhollowerBaseLib.dll` referenced. It can be found in th
 Now we can use `UnhollowerRuntimeLib.XrefScans.XrefScanner.XrefScan(methodBase)` to scan our method of choice in the form of a `MethodBase`.<br>
 This will return an `IEnumerable<UnhollowerRuntimeLib.XrefScans.XrefInstance>`, which we can loop through.<br>
 Here's what your code should look like so far:
+
 ```cs
 var instances = UnhollowerRuntimeLib.XrefScans.XrefScanner.XrefScan(methodBase);
-foreach (UnhollowerRuntimeLib.XrefScans.XrefInstance instance in instances) 
+foreach (UnhollowerRuntimeLib.XrefScans.XrefInstance instance in instances)
 {
-    
+
 }
 ```
 
 Now this is where finding strings splits.<br>
 To find the strings, we must ensure that the `UnhollowerRuntimeLib.XrefScans.XrefType` of our instance is `Global`.<br>
 This can be done like so:
+
 ```cs
 var instances = UnhollowerRuntimeLib.XrefScans.XrefScanner.XrefScan(methodBase);
-foreach (UnhollowerRuntimeLib.XrefScans.XrefInstance instance in instances) 
+foreach (UnhollowerRuntimeLib.XrefScans.XrefInstance instance in instances)
 {
     if (instance.Type == UnhollowerRuntimeLib.XrefScans.XrefType.Global)
     {
-        
+
     }
     else
     {
@@ -102,19 +110,20 @@ foreach (UnhollowerRuntimeLib.XrefScans.XrefInstance instance in instances)
 }
 ```
 
-Now, we can call `ReadAsObject()` to get an `Il2CppSystem.Object` representing the scanned method. 
+Now, we can call `ReadAsObject()` to get an `Il2CppSystem.Object` representing the scanned method.
 If we did not make sure our instance type was global, `ReadAsObject()` would return null.<br>
 If we now call `ToString()` on the instance, we can get the strings used in the scanned method.<br>
 This looks like this:
+
 ```cs
 var instances = UnhollowerRuntimeLib.XrefScans.XrefScanner.XrefScan(methodBase);
-foreach (UnhollowerRuntimeLib.XrefScans.XrefInstance instance in instances) 
+foreach (UnhollowerRuntimeLib.XrefScans.XrefInstance instance in instances)
 {
     if (instance.Type == UnhollowerRuntimeLib.XrefScans.XrefType.Global)
     {
         Il2CppSystem.Object methodObject = instance.ReadAsObject();
         string usedString = methodObject.ToString();
-        
+
         // Rest of your code
     }
     else
@@ -130,6 +139,7 @@ For an example, let's use the method `foo` in the `Example` class, which gets ca
 Let's also assume that the `foo` method has the literal "Example Xref" in it.
 
 If we were to use the literal to xref for the `foo` method, it would look something like this:
+
 ```cs
 MethodInfo fooMethod = typeof(Example).GetMethods() // Get the methods in the Example class
     .First(mi => XrefScanner.XrefScan(mi) // Scan each method
@@ -137,6 +147,7 @@ MethodInfo fooMethod = typeof(Example).GetMethods() // Get the methods in the Ex
 ```
 
 Now, if we were to scan for the fact that `foo` gets called by `bar`, it would look like this:
+
 ```cs
 MethodInfo fooMethod = typeof(Example).GetMethods() // Get the methods in the Example class
     .First(mi => XrefScanner.UsedBy(mi) // Scan each method

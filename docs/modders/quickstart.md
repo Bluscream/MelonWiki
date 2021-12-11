@@ -15,13 +15,16 @@ Find to the folder of the game you installed MelonLoader on. The file you need t
 
 MelonLoader relies on assembly info to get your mod description. We will have to setup them up.<br>
 To do that, go to the `Properties` directory, and add these three lines to `AssemblyInfo.cs`:
+
 ```cs
 using MelonLoader;
 // ...
 [assembly: MelonInfo(typeof(MyMod), "My Mod Name", "version", "Author Name")]
 [assembly: MelonGame("GameStudio", "GameName")]
 ```
+
 MelonInfo contains 4 required parameters and an optional one:
+
 - `MyMod`: The main class of your mod. We will talk about it later
 - `My Mod Name`: The name of your mod
 - `version`: The version of the mod. It should respect the [semver format](https://semver.org/) (example: `1.0.0`)
@@ -29,6 +32,7 @@ MelonInfo contains 4 required parameters and an optional one:
 - `Download Link`: The link to download or find the mod, this is optional
 
 MelonGame contains 2 parameters:
+
 - `GameStudio`: The name of the developer(s) of the game, as defined in the Unity settings.
 - `GameName`: The name of the game, as defined in the Unity settings.
 
@@ -39,6 +43,7 @@ We are almost ready. Let's go back to our `MyMod` class, add a `using MelonLoade
 ### The MelonMod class
 
 At this point, your `MyMod` class should looks like this:
+
 ```cs
 using MelonLoader;
 
@@ -52,21 +57,23 @@ namespace MyProject
 ```
 
 MelonMod has a few virtual methods that can be overridden:
- - `OnApplicationStart()`: Called after every mod is loaded and right when the game starts.
- - `OnApplicationQuit()`: Called when the application is closing.
- - `OnUpdate()`: Called at the end of each `Update` call.
- - `OnLateUpdate()`: Called at the end of each `LateUpdate` call.
- - `OnFixedUpdate()`: Called at the end of each `FixedUpdate` call.
- - `OnGUI()`: Called during the GUI update.
- - `OnSceneWasInitialized(int buildIndex, string sceneName)`: Called when a scene is initialized.
- - `OnSceneWasLoaded(int buildIndex, string sceneName)`: Called when a scene is loaded.
- - `OnPreferencesLoaded()`: Called when a mod calls `MelonLoader.MelonPreferences.Load()`, or when MelonPreferences loads external changes.
- - `OnPreferencesSaved()`: Called when a mod calls `MelonLoader.MelonPreferences.Save()`, or when the application quits.
- - `BONEWORKS_OnLoadingScreen()`: (BONEWORKS only) called when the loading screen shows as BONEWORKS loads scene differently.
+
+- `OnApplicationStart()`: Called after every mod is loaded and right when the game starts.
+- `OnApplicationQuit()`: Called when the application is closing.
+- `OnUpdate()`: Called at the end of each `Update` call.
+- `OnLateUpdate()`: Called at the end of each `LateUpdate` call.
+- `OnFixedUpdate()`: Called at the end of each `FixedUpdate` call.
+- `OnGUI()`: Called during the GUI update.
+- `OnSceneWasInitialized(int buildIndex, string sceneName)`: Called when a scene is initialized.
+- `OnSceneWasLoaded(int buildIndex, string sceneName)`: Called when a scene is loaded.
+- `OnPreferencesLoaded()`: Called when a mod calls `MelonLoader.MelonPreferences.Load()`, or when MelonPreferences loads external changes.
+- `OnPreferencesSaved()`: Called when a mod calls `MelonLoader.MelonPreferences.Save()`, or when the application quits.
+- `BONEWORKS_OnLoadingScreen()`: (BONEWORKS only) called when the loading screen shows as BONEWORKS loads scene differently.
 
 Most recently in MelonLoader 0.4.0 and later, the following methods were added:
- - `OnSceneWasUnloaded(int buildIndex, string sceneName)`: Called when a scene is unloaded.
- - `OnApplicationLateStart()`: Called after `OnApplicationStart`.
+
+- `OnSceneWasUnloaded(int buildIndex, string sceneName)`: Called when a scene is unloaded.
+- `OnApplicationLateStart()`: Called after `OnApplicationStart`.
 
 ### Basic method calling
 
@@ -75,11 +82,14 @@ Most recently in MelonLoader 0.4.0 and later, the following methods were added:
 Let's print something to the console.<br>
 First, you will need to add a reference to `UnityEngine.CoreModule.dll` and `Il2Cppmscorlib.dll`.<br>
 They will be located in one of 2 places:
-- If your game is Il2Cpp, then they will be in `MelonLoader/Managed/`. 
+
+- If your game is Il2Cpp, then they will be in `MelonLoader/Managed/`.
 - If your game is mono, then they will be in `Managed/`.
 
 You will also need to use the `UnityEngine` namespace for this.
+
 > Games made using Unity 2019.4+ also requires `UnityEngine.InputModule.dll` to work.
+
 ```cs
 // At the top of the file
 using UnityEngine;

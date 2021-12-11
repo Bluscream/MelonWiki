@@ -5,7 +5,8 @@ On top of this, it let's you modify how methods execute in some cases, giving yo
 
 ## Patching using Harmony
 
-MelonLoader doesn't use base [Harmony](https://github.com/pardeike/Harmony). All versions of MelonLoader use modified versions. 
+MelonLoader doesn't use base [Harmony](https://github.com/pardeike/Harmony). All versions of MelonLoader use modified versions.
+
 - MelonLoader 0.3.0 and lower uses a slightly modified version of Harmony 1.2 (it's modified to work on Il2Cpp games)
 - After 0.3.0, MelonLoader started using a modified version of Harmony 2, called [HarmonyX](https://github.com/BepInEx/HarmonyX)
 
@@ -14,12 +15,14 @@ This is less versatile, but has better readability and is quicker than the next 
 The second is more versatile, but harder to read and takes a bit more time. It's generally better to use when you need to put in a ton of future proofing.
 
 And really quick, before getting into the step by step, I would like to bring up 2 pages of the Harmony docs you should read if anything.
+
 1. [The article on patching itself](https://harmony.pardeike.net/articles/patching.html)
 2. [The article about injections](https://harmony.pardeike.net/articles/patching-injections.html)
 
 Both of those contain vital information for patching with Harmony. Please give them a quick read.
 
 Here is an example class we will be using in the tutorial:
+
 ```cs
 public class Example
 {
@@ -31,12 +34,12 @@ public class Example
 
     private static void PrivateMethod(string param1)
     {
-        
+
     }
 
     private static void PrivateMethod(int param1)
     {
-        
+
     }
 }
 ```
@@ -59,6 +62,7 @@ Lastly, our third argument will be an array of types representing the methods ar
 > This is only required because we are patching an overload. We can stop at the second parameter if the method we are patching doesn't have any overloads.
 
 In all, our code will look something like this:
+
 ```cs
 using Harmony; // If you're using 0.3.0 and lower
 using HarmonyLib; // If you're using 0.4.0 and later
@@ -104,8 +108,9 @@ For this, you need to know how to do reflection. A guide can be found [here](mod
 
 Let's start off by using the namespace `Harmony` if you're using MelonLoader 0.3.0, or the namespace `HarmonyLib` if you're using MelonLoader 0.4.0.
 Now, we need to call the `Patch` method in our `HarmonyInstance`. The `HarmonyInstance` can be found as a property in an instance of your mod's main class. Depending on your MelonLoader version, the property will have different names:
- - In MelonLoader 0.3.0, it will be named `Harmony`
- - In MelonLoader 0.4.0 and later, it will be named `HarmonyInstance`
+
+- In MelonLoader 0.3.0, it will be named `Harmony`
+- In MelonLoader 0.4.0 and later, it will be named `HarmonyInstance`
 
 Then, as the first argument, we need to get the MethodInfo of the method we are patching. This is why patching manually is better for future proofing, as you can determine what method you're patching at runtime, rather than putting it in an attribute.<br>
 Then, the second argument would be the prefix, the third argument would be the postfix, and the fourth would be the finalizer, which I will not cover. Reading about the finalizer can be found [here](https://harmony.pardeike.net/articles/patching-finalizer.html). For all 3 arguments, they are optional, however one must be non-null.<br>
@@ -136,8 +141,6 @@ harmony.Patch(privateMethod, myPrefix, null, myFinalizer);
 Our methods that run when the patched method runs can also have injections, which allow you to get the patched method's arguments and return value among other things.<br>
 Read about them in the Harmony docs [here](https://harmony.pardeike.net/articles/patching-injections.html).
 
-
 ## Patching using Native Hooks
 
 !> Coming Soon
-

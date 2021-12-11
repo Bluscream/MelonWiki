@@ -6,10 +6,11 @@
 
 For those who don't know, MelonLoader is fully set up to use dnSpy's built in debugger.<br>
 To attach it, follow these steps:
- - Go into dnSpy, then in the top, select `Debug` -> `Start Debugging` and select `Unity` as the debug engine.
- - Then, for the executable, select your game's executable
- - And in the `Arguments` box, add `--melonloader.debug` and any other arguments you want
- - Finally, to add breakpoints, simply drag and drop the mod you want to debug into dnSpy's Assembly Explorer, then add breakpoints regularly.
+
+- Go into dnSpy, then in the top, select `Debug` -> `Start Debugging` and select `Unity` as the debug engine.
+- Then, for the executable, select your game's executable
+- And in the `Arguments` box, add `--melonloader.debug` and any other arguments you want
+- Finally, to add breakpoints, simply drag and drop the mod you want to debug into dnSpy's Assembly Explorer, then add breakpoints regularly.
 
 If you've followed all the steps, properly, this should all work.
 
@@ -22,7 +23,7 @@ Take this example exception:
 
 ```cs
 System.Exception: An exception was thrown
-  at MyFirstMod.MainClass.OnUpdate () [0x0001a] in <e2601fbc36fa4891b5bcba3b789203ba>:0 
+  at MyFirstMod.MainClass.OnUpdate () [0x0001a] in <e2601fbc36fa4891b5bcba3b789203ba>:0
 ```
 
 You can find where this error was thrown in your code by using the hex value surrounded by brackets. In this example, it would be `[0x0001a]`.<br>

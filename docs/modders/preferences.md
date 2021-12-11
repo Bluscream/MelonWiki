@@ -1,9 +1,11 @@
-# Mod Preferences 
+# Mod Preferences
+
 Mod preferences are very useful in modding, for a ton of reasons. They let create configs, and save data that's persistent which may be needed in many situations. Luckily, implimenting this is MelonLoader is very simple.<br>
 
 ## Mod Preferences in MelonLoader
 
 First, you need to create a category. To demonstrate this, I will build off of the code in the [QuickStart](modders/quickstart.md), which should look something like this:
+
 ```cs
 using MelonLoader;
 using UnityEngine;
@@ -24,6 +26,7 @@ namespace MyProject
 ```
 
 Since we only want one category, we can add it in one of `MelonMod`'s overloads called `OnApplicationStart`. It is called only once when the game starts.
+
 ```cs
 public override void OnApplicationStart()
 {
@@ -32,11 +35,13 @@ public override void OnApplicationStart()
 ```
 
 Now to create the category, we can simply call `MelonPreferences.CreateCategory` and give it the identifier `OurFirstCategory`:
+
 ```cs
 MelonPreferences.CreateCategory("OurFirstCategory");
 ```
 
 Because we want to save it for later use in our mod, let's store the result in static field.
+
 ```cs
 public static MelonPreferences_Category ourFirstCategory;
 public override void OnApplicationStart()
@@ -49,6 +54,7 @@ And that's it!<br>
 You also may find it necessary to add multiple categories if your mod had a lot of preferences. Luckily, this is also very simple. Just create a new one! There's no limitations to how many categories a mod can make.
 
 Now, let's start actually making preferences. For this, we just need to call the `CreateEntry` method on our category instance. Let's also make it a bool.
+
 ```cs
 // In the OnApplicationStart overload
                            // Identifier// Default value
@@ -56,6 +62,7 @@ ourFirstCategory.CreateEntry("ourFirstEntry", false);
 ```
 
 We should also save it in a static field for use later.
+
 ```cs
 // In the class definition
 public static MelonPreferences_Entry<bool> ourFirstEntry;
@@ -65,6 +72,7 @@ ourFirstEntry = ourFirstCategory.CreateEntry("ourFirstEntry", false);
 ```
 
 Now, we can actually use it. Let's say we want to use this entry to enable/disable our `OnUpdate` method. This is pretty simple:
+
 ```cs
 // In the OnUpdate overload
 // If our entry is false, then return
@@ -73,6 +81,7 @@ if (!ourFirstEntry.value)
 ```
 
 We can also use the `value` property on our entry for the inverse, or, setting the entry value. To do so we just have to assign a value to it:
+
 ```cs
 ourFirstEntry.value = true;
 MelonLogger.Msg(ourFirstEntry.value); // true
@@ -94,7 +103,7 @@ namespace MyProject
     {
         public static MelonPreferences_Category ourFirstCategory;
         public static MelonPreferences_Entry<bool> ourFirstEntry;
-        
+
         public override void OnApplicationStart()
         {
             ourFirstCategory = MelonPreferences.CreateCategory("OurFirstCategory");
@@ -132,6 +141,7 @@ and the use of object oriented conventions while saving and using preferences.
 The main difference between the two libs, is that custom serializers are almost never needed, as Tomlet will handle most of that for you.
 In fact, Tomlet will handle deserializing and serializing most Unity types for you.
 To demonstrate this, let's say we had this type:
+
 ```cs
 public class MyCustomType
 {
@@ -139,11 +149,13 @@ public class MyCustomType
     public List<int> myList;
 }
 ```
+
 We could simply make the entry's type `MyCustomType` while creating it, and Tomlet would save the entry fine.
 
 Another addition to MelonLoader 0.4.0 is the ability to save categories to specific files instead of the main `MelonPreferences.cfg` file.<br>
 To do this, we simply call the `SetFilePath` method after creating the category and when we want to save, we call the `SaveToFile` method.<br>
 This would look something like this:
+
 ```cs
 myCategory.SetFilePath("Foo/Bar.cfg");
 
@@ -151,7 +163,9 @@ myCategory.SetFilePath("Foo/Bar.cfg");
 
 myCategory.SaveToFile();
 ```
+
 If we wanted to set the category's file path, but not load the preferences from the file yet, simply set the `autoload` param in `SetFilePath` to false, and manually call `LoadFromFile`.
+
 ```cs
 myCategory.SetFilePath("Foo/Bar.cfg", autoload: false);
 
